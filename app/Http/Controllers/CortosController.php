@@ -25,7 +25,12 @@ class CortosController extends Controller
 
     public function create()
     {
-        return view("cortos.create");
+        $usuarios = User::select("id", "name")->orderBy("id")->get();
+        $directores = Directores::select("id", "nombre", "apellidos")->orderBy("id")->get();
+        return view("cortos.create", [
+            "usuarios" => $usuarios,
+            "directores" => $directores
+        ]);
     }
 
     public function store(CortosRequest $request)
