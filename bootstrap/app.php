@@ -11,8 +11,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        error_log("He pasado por middleware");
         $middleware->alias([ 
-            'rol' => \App\Http\Middleware\RolCheck::class, 
+            'guest' => \App\Http\Middleware\NoAuth::class,
+            'auth' => \App\Http\Middleware\Auth::class,
+            'rol' => \App\Http\Middleware\RolCheck::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

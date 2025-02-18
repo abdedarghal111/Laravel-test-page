@@ -2,28 +2,24 @@
 
 namespace App\Http\Middleware;
 
-use Auth;
 use Closure;
 use Illuminate\Http\Request;
-use Log;
 use Symfony\Component\HttpFoundation\Response;
 
-class RolCheck
+class Auth
 {
     /**
      * Handle an incoming request.
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, ...$roles): Response
+    public function handle(Request $request, Closure $next): Response
     {
-        if (in_array(Auth()->user()->rol, $roles)) {
+        if (Auth()->check()) {
             return $next($request);
         } else {
             //return redirect('/');
-            abort(403, 'Acceso no autorizado, vuelve a la página de inicio.');
+            abort(403, 'Inicia sesión para poder visualizara esta página.');
         }
     }
-
-    
 }

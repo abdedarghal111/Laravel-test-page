@@ -5,12 +5,14 @@
             <div class="card-body">
                 <h5 class="card-title">{{$director["nombre"]}}</h5>
                 <p class="card-subtitle mb-2 text-body-secondary">Apellidos: {{$director["apellidos"]}}</p>
-                <a href="{{route("directores.edit", $director)}}" class="btn btn-primary">Editar</a>
-                <form class="d-inline" action="{{ route('directores.destroy', $director) }}" method="POST">
-                    @method('DELETE')
-                    @csrf
-                    <button class="btn btn-danger">Borrar</button>
-                </form>
+                @if (hasRol("editor", "admin"))
+                    <a href="{{route("directores.edit", $director)}}" class="btn btn-primary">Editar</a>
+                    <form class="d-inline" action="{{ route('directores.destroy', $director) }}" method="POST">
+                        @method('DELETE')
+                        @csrf
+                        <button class="btn btn-danger">Borrar</button>
+                    </form>
+                @endif
             </div>
         </div>
     </div>

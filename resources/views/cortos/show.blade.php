@@ -13,16 +13,22 @@
                 Sinápsis: {{$corto["sinopsis"]}}
             </p>
             <p class="card-text">
-                Publicado por: <a href="{{route("user.show", $corto["usuario"])}}">
-                    {{$corto["usuario"]["name"]}}
-                </a>
+                @if(hasRol("editor","admin"))
+                    Publicado por: <a href="{{route("user.show", $corto["usuario"])}}">
+                        {{$corto["usuario"]["name"]}}
+                    </a>
+                @else
+                    Publicado por: {{$corto["usuario"]["name"]}}
+                @endif
             </p>
-            <a href="{{route("cortos.edit", $corto)}}" class="btn btn-primary">Editar</a>
-            <form class="d-inline" action="{{ route('cortos.destroy', $corto) }}" method="POST">
-                @method('DELETE')
-                @csrf
-                <button class="btn btn-danger">Borrar</button>
-            </form>
+            @if (hasRol("editor", "admin"))
+                <a href="{{route("cortos.edit", $corto)}}" class="btn btn-primary">Editar</a>
+                <form class="d-inline" action="{{ route('cortos.destroy', $corto) }}" method="POST">
+                    @method('DELETE')
+                    @csrf
+                    <button class="btn btn-danger">Borrar</button>
+                </form>
+            @endif
         </div>
     </div>
 @endsection

@@ -15,12 +15,18 @@
             </div>
             <div class="card-body">
                 <ul>
-                    <li><a href="{{route("user.index")}}">
-                            Ver, editar o borrar
-                    </a></li>
-                    <li><a href="{{route("user.create")}}">
-                            Agregar
-                    </a></li>
+                    @if(hasRol("admin"))
+                        <li><a href="{{route("user.index")}}">
+                                Ver, editar o borrar
+                        </a></li>
+                        <li><a href="{{route("user.create")}}">
+                                Agregar
+                        </a></li>
+                    @else
+                        <li><a href="{{route("user.index")}}">
+                                Ver
+                        </a></li>
+                    @endif
                 </ul>
             </div>
         </div>

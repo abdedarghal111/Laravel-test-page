@@ -15,16 +15,34 @@ foreach ([UserController::class, CortosController::class, DirectoresController::
     $name = $class::$name;
     if($name === "cortos"){
         Route::get("$name/action", "$class@action")->name("$name.action"); //todos
-        Route::resource($name, $class)->parameter($name, $name)->except(["index","show"])->middleware(["auth", "rol:director,admin"]);
-        Route::resource($name, $class)->parameter($name, $name)->only(["index","show"]); //todos
+
+        Route::resource($name, $class)->parameter($name, $name)// editar
+            ->except(["index","show"])->middleware(["auth", "rol:editor,admin"]);
+
+        Route::resource($name, $class)->parameter($name, $name)// ver
+            ->only(["index","show"]); //todos
+
     }else if($name === "directores"){
-        Route::get("$name/action", "$class@action")->name("$name.action");
-        Route::resource($name, $class)->parameter($name, $name)->except(["index","show"])->middleware(["auth", "rol:director,admin"]);
-        Route::resource($name, $class)->parameter($name, $name)->only(["index","show"])->middleware(["auth"]);
+
+        Route::get("$name/action", "$class@action")->name("$name.action")
+            ->middleware(["auth"]);
+
+        Route::resource($name, $class)->parameter($name, $name)// editar
+            ->except(["index","show"])->middleware(["auth", "rol:editor,admin"]);
+
+        Route::resource($name, $class)->parameter($name, $name)// ver
+            ->only(["index","show"])->middleware(["auth"]);
+
     }else {//users
-        Route::get("$name/action", "$class@action")->name("$name.action");
-        Route::resource($name, $class)->parameter($name, $name)->except(["index","show"])->middleware(["auth"])->middleware(["auth", "rol:admin"]);
-        Route::resource($name, $class)->parameter($name, $name)->only(["index","show"]);
+        
+        Route::get("$name/action", "$class@action")->name("$name.action")
+            ->middleware(["auth", "rol:editor,admin"]);
+
+        Route::resource($name, $class)->parameter($name, $name)// editar
+            ->except(["index","show"])->middleware(["auth", "rol:admin"]);
+
+        Route::resource($name, $class)->parameter($name, $name)// ver
+            ->only(["index","show"])->middleware(["auth", "rol:editor,admin"]);
     }
 }
 
@@ -37,26 +55,5 @@ Route::middleware(["guest"])->group(function() use ($auth){
     Route::post('login/submit', "$auth@submitRegister")->name('signup.submit');
 });
 
-Route::get('signout/submit', "$auth@submitSignout")->name('signout.submit')->middleware(["auth"]);
-
-//test rutas
-Route::get('rutas', function () {
-    $routeCollection = Route::getRoutes();
-
-    echo "<table style='width:100%'>";
-    echo "<tr>";
-    echo "<td width='10%'><h4>HTTP Method</h4></td>";
-    echo "<td width='10%'><h4>Route</h4></td>";
-    echo "<td width='10%'><h4>Name</h4></td>";
-    echo "<td width='70%'><h4>Corresponding Action</h4></td>";
-    echo "</tr>";
-    foreach ($routeCollection as $value) {
-        echo "<tr>";
-        echo "<td>" . $value->methods()[0] . "</td>";
-        echo "<td>" . $value->uri() . "</td>";
-        echo "<td>" . $value->getName() . "</td>";
-        echo "<td>" . $value->getActionName() . "</td>";
-        echo "</tr>";
-    }
-    echo "</table>";
-});
+Route::get('signout/submit', "$auth@submitSignout")->name('signout.submit')
+    ->middleware(["auth"]);
