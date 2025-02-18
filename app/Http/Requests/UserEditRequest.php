@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserRequest extends FormRequest
+class UserEditRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -31,8 +31,8 @@ class UserRequest extends FormRequest
             'Nombre' => 'required',
             'NombreDeUsuario' => "required|unique:App\Models\User,username,$id,id",
             'Email' => "required|email:rfc|unique:App\Models\User,email,$id,id",
-            'Contraseña' => 'required|min:8',
-            "RepetirContraseña" => 'required|same:Contraseña'
+            'Contraseña' => 'nullable|min:8',
+            "RepetirContraseña" => 'same:Contraseña'
         ];
     }
     

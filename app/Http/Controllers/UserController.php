@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\UserEditRequest;
 use App\Models\User;
 use Hash;
 
@@ -31,8 +32,9 @@ class UserController extends Controller
     {
         $user = new User;
         $user->name = $request->input('Nombre');
+        $user->username = $request->input('NombreDeUsuario');
         $user->email = $request->input('Email');
-        $user->password = Hash::make($request->input('Contraseña'));
+        $user->password = $request->input('Contraseña');
         $user->created_at = now();
         $user->updated_at = now();
         $user->save();
@@ -50,11 +52,15 @@ class UserController extends Controller
         return view("user.edit", compact('user'));
     }
 
-    public function update(UserRequest $request, User $user)
+    public function update(UserEditRequest $request, User $user)
     {
         $user->name = $request->input('Nombre');
+        $user->username = $request->input('NombreDeUsuario');
         $user->email = $request->input('Email');
-        $user->password = Hash::make($request->input('Contraseña'));
+        if($request->exists('Constraseña')){
+            $user->password = $request->input('Contraseña');
+        }
+        //$user->password = $request->input('Contraseña');//Hash::make($request->input('Contraseña'));
         $user->updated_at = now();
         $user->save();
         return redirect()->route('user.index')->with('status','Usuario editado correctamente');

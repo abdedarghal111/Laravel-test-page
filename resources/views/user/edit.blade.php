@@ -13,19 +13,24 @@
                 @method("PUT")
 
                 @php
-                    $prop = ["name", "email", "", ""]
+                    $prop = ["name", "username", "email", "", ""]
                 @endphp
-                @foreach (["Nombre", "Email", "Contraseña", "RepetirContraseña"] as $i => $campo)
-                    @if ($campo !== "RepetirContraseña")
+                @foreach (["Nombre", "NombreDeUsuario", "Email", "Contraseña", "RepetirContraseña"] as $i => $campo)
+                    @if($campo === "NombreDeUsuario")
+                        <div class="form-group mb-3">
+                            <label for="{{$campo}}">Nombre de usuario</label>
+                            <input type="text" name="{{$campo}}" class="form-control" value="{{old($campo) ? old($campo) : $user[$prop[$i]]}}">
+                        </div>
+                    @elseif($campo === "RepetirContraseña")
+                        <div class="form-group mb-3">
+                            <label for="{{$campo}}">Repetir contraseña</label>
+                            <input type="text" name="{{$campo}}" class="form-control" value="{{old($campo)}}">
+                        </div>
+                    @else
                         <div class="form-group mb-3">
                             <label for="{{$campo}}">{{$campo}}</label>
                             <input type="text" name="{{$campo}}" class="form-control"
                                 value="{{old($campo) ? old($campo) : $user[$prop[$i]]}}">
-                        </div>
-                    @else
-                        <div class="form-group mb-3">
-                            <label for="{{$campo}}">Repetir contraseña</label>
-                            <input type="text" name="{{$campo}}" class="form-control" value="{{old($campo)}}">
                         </div>
                     @endif
 
